@@ -1,22 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Payment - Jack's Home Produce</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f3f3f3;
+    }
+    h1 {
+      color: green;
+    }
+    .payment-form {
+      background-color: white;
+      max-width: 400px;
+      padding: 20px;
+      border-radius: 8px;
+      margin: auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .payment-form label {
+      display: block;
+      margin-top: 10px;
+    }
+    .payment-form input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    .btn {
+      margin-top: 20px;
+      background-color: green;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .btn:hover {
+      background-color: darkgreen;
+    }
+  </style>
 </head>
 <body>
-  <h1>Payment for <span id="product-name"></span></h1>
-  <p>Amount: $<span id="product-price"></span></p>
-  <h3>Bank Details</h3>
-  <p>BSB: <strong>123-456</strong></p>
-  <p>Account Number: <strong>12345678</strong></p>
-  <p>After you've transferred the money, click below:</p>
-  <a href="success.html" style="background-color:green;color:white;padding:10px 20px;text-decoration:none;">I Paid!</a>
+  <div class="payment-form">
+    <h1>Checkout</h1>
+    <p>Enter your payment details below:</p>
+
+    <label for="cardNumber">Card Number</label>
+    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456">
+
+    <label for="expiry">Expiry Date</label>
+    <input type="text" id="expiry" placeholder="MM/YY">
+
+    <label for="cvc">CVC</label>
+    <input type="text" id="cvc" placeholder="123">
+
+    <button class="btn" onclick="showSuccess()">Pay Now</button>
+  </div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    document.getElementById("product-name").innerText = params.get("product");
-    document.getElementById("product-price").innerText = params.get("price");
+    function showSuccess() {
+      alert("Payment Successful! Thank you for your order.");
+      window.location.href = "index.html"; // back to home
+    }
   </script>
 </body>
 </html>
