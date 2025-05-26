@@ -1,0 +1,23 @@
+
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+h1 {
+  color: darkgreen;
+}
+
+.coming-soon {
+  color: grey;
+  border: 2px solid red;
+  padding: 2px 4px;
+}
+
+.send-button {
+  background-color: green;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+}

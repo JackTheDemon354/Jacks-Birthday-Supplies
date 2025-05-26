@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Staff Login</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    function checkLogin(event) {
+      event.preventDefault();
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+      if (user === "JackTheDemon354" && pass === "Jackar00") {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("staffPortal").style.display = "block";
+      } else {
+        alert("Incorrect username or password!");
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Staff Login</h1>
+  <div id="login">
+    <form onsubmit="checkLogin(event)">
+      <label>Username:<br><input type="text" id="username" required></label><br><br>
+      <label>Password:<br><input type="password" id="password" required></label><br><br>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+  <div id="staffPortal" style="display:none;">
+    <h2>Welcome to the Staff Portal!</h2>
+    <p>Here you can manage your store.</p>
+  </div>
+</body>
+</html>
