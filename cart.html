@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Cart</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+    button { background: red; color: white; padding: 10px; border: none; cursor: pointer; }
+  </style>
+  <script>
+    function loadCart() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const table = document.getElementById('cartTable');
+      let total = 0;
+      cart.forEach((item, index) => {
+        const row = table.insertRow();
+        row.insertCell(0).textContent = item.item;
+        row.insertCell(1).textContent = "$" + item.price.toFixed(2);
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "Delete";
+        delBtn.onclick = () => deleteItem(index);
+        row.insertCell(2).appendChild(delBtn);
+        total += item.price;
+      });
+      document.getElementById('total').textContent = "Total: $" + total.toFixed(2);
+    }
+
+    function deleteItem(index) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      location.reload();
+    }
+
+    function pay() {
+      alert("To pay, please transfer to:\nBSB: 123-456\nAccount: 12345678\nThen email Jack.vanwijk@hotmail.com.");
+    }
+
+    window.onload = loadCart;
+  </script>
+</head>
+<body>
+  <h1>Your Shopping Cart</h1>
+  <table id="cartTable">
+    <tr><th>Item</th><th>Price</th><th>Remove</th></tr>
+  </table>
+  <h2 id="total">Total: $0.00</h2>
+  <button onclick="pay()">Pay Now</button>
+  <br><br>
+  <a href="index.html">⬅ Back to Home</a>
+</body>
+</html>
