@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jack's Home Produce</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Jack's Home Produce</h1>
+  <p>I... am Jack. I am the owner of this website. I sell homemade Honey ($8.50), Lemonade ($3.00), and Helium Balloons ($3.00).</p>
+
+  <div class="products">
+    <h2>Products</h2>
+    <ul>
+      <li>Honey - $8.50 per litre</li>
+      <li>Helium Balloons - $3.00 each</li>
+      <li>Lemonade - $3.50 per cup <span class="coming-soon">Coming Soon!</span></li>
+    </ul>
+  </div>
+
+  <div class="contact-form">
+    <h2>Contact Me</h2>
+    <form id="contactForm">
+      <label>Name: <input type="text" name="name" required></label><br>
+      <label>Email: <input type="email" name="email" required></label><br>
+      <label>Message:<br><textarea name="message" rows="5" required></textarea></label><br>
+      <button type="submit">Send Message!</button>
+    </form>
+    <div id="messageStatus"></div>
+  </div>
+
+  <div class="location">
+    <h2>My Location</h2>
+    <p>Location: Jacoby St, Mundaring WA 6073, at Sculpture Park</p>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!..." width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
