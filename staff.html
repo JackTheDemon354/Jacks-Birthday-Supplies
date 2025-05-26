@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Staff Portal - Jack’s Home Produce</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Staff Portal</h1>
+
+  <div id="login">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label>Username: <input type="text" id="username" required></label><br>
+      <label>Password: <input type="password" id="password" required></label><br>
+      <button type="submit">Login</button>
+    </form>
+    <div id="loginError" style="color:red;"></div>
+  </div>
+
+  <div id="portal" style="display:none;">
+    <h2>Received Messages</h2>
+    <ul id="messageList"></ul>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    const loginError = document.getElementById("loginError");
+    const messageList = document.getElementById("messageList");
+
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+
+      if (user === "JackTheDemon354" && pass === "Jackar00") {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("portal").style.display = "block";
+
+        const messages = JSON.parse(localStorage.getItem("messages") || "[]");
+        if (messages.length === 0) {
+          messageList.innerHTML = "<li>No messages yet.</li>";
+        } else {
+          messages.forEach(msg => {
+            const li = document.createElement("li");
+            li.innerHTML = `<strong>${msg.name}</strong> (${msg.email}): ${msg.message}`;
+            messageList.appendChild(li);
+          });
+        }
+      } else {
+        loginError.innerText = "Incorrect login!";
+      }
+    });
+  </script>
+</body>
+</html>
