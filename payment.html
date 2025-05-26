@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment - Jack's Home Produce</title>
+</head>
+<body>
+  <h1>Payment for <span id="product-name"></span></h1>
+  <p>Amount: $<span id="product-price"></span></p>
+  <h3>Bank Details</h3>
+  <p>BSB: <strong>123-456</strong></p>
+  <p>Account Number: <strong>12345678</strong></p>
+  <p>After you've transferred the money, click below:</p>
+  <a href="success.html" style="background-color:green;color:white;padding:10px 20px;text-decoration:none;">I Paid!</a>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    document.getElementById("product-name").innerText = params.get("product");
+    document.getElementById("product-price").innerText = params.get("price");
+  </script>
+</body>
+</html>
