@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Register - Jack's Home Produce</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .register-box { max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+    input { width: 100%; padding: 10px; margin: 10px 0; }
+    button { padding: 10px 20px; background-color: blue; color: white; border: none; cursor: pointer; }
+    .link { display: block; margin-top: 10px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="register-box">
+    <h2>User Registration</h2>
+    <input type="text" id="new-username" placeholder="Choose a Username">
+    <input type="password" id="new-password" placeholder="Choose a Password">
+    <button onclick="registerUser()">Register</button>
+    <a class="link" href="user-login.html">Already have an account? Sign In</a>
+    <a class="link" href="index.html">⬅ Back to Home</a>
+  </div>
+
+  <script>
+    function registerUser() {
+      const username = document.getElementById('new-username').value;
+      const password = document.getElementById('new-password').value;
+
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      if (users.find(u => u.username === username)) {
+        alert("Username already taken.");
+        return;
+      }
+
+      users.push({ username, password });
+      localStorage.setItem('users', JSON.stringify(users));
+      alert("Registration successful! You can now log in.");
+      window.location.href = "user-login.html";
+    }
+  </script>
+</body>
+</html>
