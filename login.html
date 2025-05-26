@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Staff Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    input {
+      display: block;
+      margin-bottom: 10px;
+      padding: 8px;
+      width: 250px;
+    }
+    button {
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Staff Login</h1>
+  <input type="text" id="username" placeholder="Username" />
+  <input type="password" id="password" placeholder="Password" />
+  <button onclick="login()">Login</button>
+  <p id="error" style="color: red;"></p>
+
+  <script>
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      if (username === "JackTheDemon354" && password === "Jackar00") {
+        localStorage.setItem("loggedIn", "true");
+        window.location.href = "staff.html";
+      } else {
+        document.getElementById("error").innerText = "Wrong username or password.";
+      }
+    }
+  </script>
+</body>
+</html>
