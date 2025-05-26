@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Jack's Home Produce</title>
   <style>
     body {
@@ -10,104 +10,112 @@
       margin: 0;
       padding: 0;
     }
-    .button {
+    .navbar {
       background-color: green;
       color: white;
-      padding: 10px 20px;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .nav-bar {
-      background-color: #f0f0f0;
       padding: 10px;
-      text-align: right;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 999;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .nav-space {
-      height: 60px;
+    .navbar a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .container {
+      padding: 20px;
     }
     .product {
-      border: 1px solid #ddd;
+      border: 1px solid #ccc;
       padding: 10px;
-      margin: 10px;
-      border-radius: 5px;
+      margin: 10px 0;
     }
     .coming-soon {
       color: grey;
       border: 1px solid red;
-      padding: 2px 5px;
       display: inline-block;
-      margin-top: 5px;
+      padding: 2px 6px;
+      margin-left: 5px;
+    }
+    .button {
+      background-color: green;
+      color: white;
+      padding: 8px 15px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+      border: none;
+      cursor: pointer;
+    }
+    form input, form textarea {
+      display: block;
+      width: 100%;
+      margin: 5px 0 15px;
+      padding: 8px;
     }
   </style>
 </head>
 <body>
-  <!-- Navigation Bar -->
-  <div class="nav-bar">
-    <a href="cart.html" style="text-decoration: none; margin-right: 10px;">
-      <button class="button">🛒 Cart</button>
-    </a>
-    <a href="staff.html" style="text-decoration: none; margin-right: 10px;">
-      <button class="button">👨‍💼 Staff Portal</button>
-    </a>
-    <a href="login.html" style="text-decoration: none;">
-      <button class="button">🔐 Sign In</button>
-    </a>
+
+  <div class="navbar">
+    <div><strong>Jack's Home Produce</strong></div>
+    <div>
+      <a href="index.html">Home</a>
+      <a href="cart.html">Cart</a>
+      <a href="staff.html">Staff Portal</a>
+      <a href="login.html">Sign In</a>
+    </div>
   </div>
 
-  <div class="nav-space"></div>
+  <div class="container">
+    <h2>Hello, I'm Jack.</h2>
+    <p>I sell homemade Honey ($8.50), Lemonade ($3.00), and Helium Balloons ($3.00).</p>
 
-  <div style="padding: 20px;">
-    <h1>Jack's Home Produce</h1>
-    <p>I... am Jack. I am the owner of this website. I sell homemade Honey ($8.50), Lemonade ($3.00), and Helium Balloons ($3.00).</p>
-
-    <!-- Product Listings -->
     <div class="product">
-      <h2>Honey</h2>
-      <p>$8.50 per litre</p>
-      <button class="button">Add to Cart</button>
+      <h3>Honey (per litre) - $8.50</h3>
+      <button class="button" onclick="addToCart('Honey', 8.50)">Add to Cart</button>
     </div>
 
     <div class="product">
-      <h2>Helium Balloons</h2>
-      <p>$3.00 each</p>
-      <button class="button">Add to Cart</button>
+      <h3>Helium Balloons - $3.00</h3>
+      <button class="button" onclick="addToCart('Helium Balloons', 3.00)">Add to Cart</button>
     </div>
 
     <div class="product">
-      <h2>Lemonade</h2>
-      <p>$3.50 per cup</p>
-      <div class="coming-soon">Coming Soon!</div>
+      <h3>Lemonade (per cup) - $3.00 <span class="coming-soon">Coming Soon!</span></h3>
     </div>
 
-    <!-- Contact Form -->
     <h2>Contact Me</h2>
-    <form action="#" method="POST">
-      <input type="text" name="name" placeholder="Your Name" required><br><br>
-      <input type="email" name="email" placeholder="Your Email" required><br><br>
-      <textarea name="message" placeholder="Your Message" required></textarea><br><br>
+    <form onsubmit="sendMessage(event)">
+      <input type="text" id="name" placeholder="Your Name" required />
+      <input type="email" id="email" placeholder="Your Email" required />
+      <textarea id="message" placeholder="Your Message" required></textarea>
       <button class="button" type="submit">Send Message!</button>
     </form>
 
-    <!-- Location and Map -->
-    <h2>My Location</h2>
-    <p>Jacoby St, Mundaring WA 6073, at Sculpture Park</p>
+    <h2>Find Me Here</h2>
     <iframe
       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3342.4958900976926!2d116.1654312!3d-31.9039183!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2a32c446abd90865%3A0xf04f0b618f1a340!2sSculpture%20Park!5e0!3m2!1sen!2sau!4v1716626784653!5m2!1sen!2sau"
-      width="100%"
-      height="450"
-      style="border:0;"
-      allowfullscreen=""
-      loading="lazy"
+      width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
       referrerpolicy="no-referrer-when-downgrade">
     </iframe>
   </div>
+
+  <script>
+    function addToCart(productName, price) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.push({ name: productName, price: price });
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(productName + " added to cart!");
+    }
+
+    function sendMessage(event) {
+      event.preventDefault();
+      alert("Message Sent! Thank you.");
+      window.location.href = "#";
+    }
+  </script>
 </body>
 </html>
