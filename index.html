@@ -1,57 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Jack's Home Produce</title>
   <style>
-    body { font-family: Arial; padding: 20px; }
-    .product { margin-bottom: 20px; }
-    button { background: green; color: white; padding: 10px; border: none; cursor: pointer; }
-    .coming-soon { color: gray; border: 1px solid red; padding: 2px 4px; }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .product { border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; }
+    .coming-soon { color: grey; border: 2px solid red; padding: 4px; display: inline-block; }
+    .map { margin-top: 20px; }
+    .button { background-color: green; color: white; padding: 10px 20px; text-decoration: none; display: inline-block; margin-top: 10px; }
   </style>
-  <script>
-    function addToCart(item, price) {
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.push({ item, price });
-      localStorage.setItem('cart', JSON.stringify(cart));
-      alert(item + " added to cart!");
-    }
-  </script>
 </head>
 <body>
-  <h1>Jack's Home Produce</h1>
-  <p>I... am Jack. I am the owner of this website. I sell homemade Honey ($8.50), Lemonade ($3.00), and Helium Balloons ($3.00).</p>
 
-  <h2>Products</h2>
+  <h1>Jack's Home Produce</h1>
+  <p>I... am Jack. I am the owner of this website. I sell homemade:</p>
+
   <div class="product">
-    <h3>Honey - $8.50 per litre</h3>
-    <button onclick="addToCart('Honey', 8.5)">Add to Cart</button>
+    <h3>🍯 Honey - $8.50 per litre</h3>
+    <a class="button" href="payment.html?product=Honey&price=8.50">Buy Now</a>
   </div>
+
   <div class="product">
-    <h3>Lemonade - $3.50 per cup <span class="coming-soon">Coming Soon!</span></h3>
-    <button onclick="addToCart('Lemonade', 3.5)">Add to Cart</button>
+    <h3>🎈 Helium Balloons - $3.00</h3>
+    <a class="button" href="payment.html?product=Helium%20Balloons&price=3.00">Buy Now</a>
   </div>
+
   <div class="product">
-    <h3>Helium Balloons - $3.00</h3>
-    <button onclick="addToCart('Helium Balloons', 3.0)">Add to Cart</button>
+    <h3>🍋 Lemonade - $3.50 per cup</h3>
+    <span class="coming-soon">Coming Soon!</span>
   </div>
 
   <h2>Contact Me</h2>
   <form action="#">
-    <label>Name: <input type="text" required></label><br><br>
-    <label>Email: <input type="email" required></label><br><br>
-    <label>Message:<br><textarea required></textarea></label><br><br>
-    <button type="submit" style="background: green;">Send Message!</button>
+    <input type="text" placeholder="Name" required><br><br>
+    <input type="email" placeholder="Email" required><br><br>
+    <textarea placeholder="Message" required></textarea><br><br>
+    <button type="submit" style="background-color:green;color:white;">Send Message!</button>
   </form>
 
-  <h2>Location</h2>
-  <p>Jacoby St, Mundaring WA 6073, at Sculpture Park</p>
-  <iframe
-    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3342.4958900976926!2d116.1654312!3d-31.9039183!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2a32c446abd90865%3A0xf04f0b618f1a340!2sSculpture%20Park!5e0!3m2!1sen!2sau!4v1716626784653!5m2!1sen!2sau"
-    width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
-    referrerpolicy="no-referrer-when-downgrade">
-  </iframe>
+  <div class="map">
+    <h3>Find me at:</h3>
+    <p>Jacoby St, Mundaring WA 6073, at Sculpture Park</p>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3342.4958900976926!2d116.1654312!3d-31.9039183!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2a32c446abd90865%3A0xf04f0b618f1a340!2sSculpture%20Park!5e0!3m2!1sen!2sau!4v1716626784653!5m2!1sen!2sau"
+      width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
 
-  <br><br>
-  <a href="cart.html">🛒 Go to Cart</a>
 </body>
 </html>
