@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Moderator Login</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .login-box {
+      max-width: 400px;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    input { width: 100%; padding: 10px; margin: 10px 0; }
+    button {
+      padding: 10px;
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .link { display: block; margin-top: 10px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Moderator Login</h2>
+    <input type="text" id="mod-username" placeholder="Username" />
+    <input type="password" id="mod-password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <a class="link" href="index.html">⬅ Back to Home</a>
+  </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById("mod-username").value;
+      const password = document.getElementById("mod-password").value;
+
+      const mods = JSON.parse(localStorage.getItem("moderators")) || {};
+      if (mods[username] && mods[username] === password) {
+        alert("Moderator login successful!");
+        window.location.href = "moderator.html";
+      } else {
+        alert("Incorrect moderator credentials.");
+      }
+    }
+  </script>
+</body>
+</html>
