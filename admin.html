@@ -46,8 +46,11 @@
       background: red;
     }
 
-    .product-preview {
-      margin-top: 20px;
+    .remove-btn {
+      background: darkred;
+      color: white;
+      margin-left: 10px;
+      padding: 5px 10px;
     }
 
     .log-entry {
@@ -56,20 +59,6 @@
       border: 1px solid #ccc;
       margin-top: 10px;
     }
-
-    .remove-btn {
-      background: darkred;
-      color: white;
-      margin-left: 10px;
-      padding: 5px 10px;
-    }
-
-    .edit-btn {
-      background: orange;
-      color: white;
-      margin-left: 10px;
-      padding: 5px 10px;
-    }
   </style>
 </head>
 <body>
@@ -77,46 +66,30 @@
   <button class="logout-btn" onclick="logout()">Logout</button>
 
   <div class="section">
-    <h2>Edit Products</h2>
-    <label>Product:</label>
-    <select id="product-select">
-      <option value="honey">Honey</option>
-      <option value="balloons">Helium Balloons</option>
-      <option value="lemonade">Lemonade</option>
+    <h2>Live Product Editor</h2>
+    <div id="product-list">Loading products...</div>
+  </div>
+
+  <div class="section">
+    <h2>Add New Product</h2>
+    <input type="text" id="new-name" placeholder="Product name">
+    <input type="text" id="new-price" placeholder="Price">
+    <select id="new-soon">
+      <option value="no">Not Coming Soon</option>
+      <option value="yes">Coming Soon</option>
     </select>
+    <button onclick="addProduct()">Add Product</button>
+    <div id="add-result"></div>
+  </div>
 
-    <label>New Price:</label>
-    <input type="text" id="new-price" placeholder="$0.00" />
-
-    <label>Mark as Coming Soon?</label>
-    <select id="coming-soon">
-      <option value="no">No</option>
-      <option value="yes">Yes</option>
-    </select>
-
-    <button onclick="saveProduct()">Save Changes</button>
-
-    <div class="product-preview" id="product-preview"></div>
+  <div class="section">
+    <h2>Delete User Accounts</h2>
+    <div id="user-list">Loading users...</div>
   </div>
 
   <div class="section">
     <h2>Recent Payments</h2>
-    <div id="payment-log">Loading...</div>
-  </div>
-
-  <div class="section">
-    <h2>Add New Staff</h2>
-    <label>Username:</label>
-    <input type="text" id="new-staff-username" placeholder="Username" />
-    <label>Password:</label>
-    <input type="password" id="new-staff-password" placeholder="Password" />
-    <button onclick="addStaff()">Add Staff</button>
-    <div id="add-staff-result"></div>
-  </div>
-
-  <div class="section">
-    <h2>Current Staff</h2>
-    <div id="staff-list">Loading...</div>
+    <div id="payment-log">Loading payments...</div>
   </div>
 
   <script>
@@ -125,22 +98,98 @@
       window.location.href = "login.html";
     }
 
-    function saveProduct() {
-      const product = document.getElementById("product-select").value;
-      const price = document.getElementById("new-price").value;
-      const comingSoon = document.getElementById("coming-soon").value;
+    function getProducts() {
+      return JSON.parse(localStorage.getItem("siteProducts")) || [
+        { name: "Honey", price: "8.50", soon: false },
+        { name: "Helium Balloons", price: "3.00", soon: false },
+        { name: "Lemonade", price: "3.50", soon: true }
+      ];
+    }
 
-      const changes = {
-        price: price,
-        comingSoon: comingSoon === "yes"
-      };
+    function saveProducts(products) {
+      localStorage.setItem("siteProducts", JSON.stringify(products));
+      loadProducts();
+    }
 
-      const data = JSON.parse(localStorage.getItem("adminProducts")) || {};
-      data[product] = changes;
-      localStorage.setItem("adminProducts", JSON.stringify(data));
+    function loadProducts() {
+      const products = getProducts();
+      const list = document.getElementById("product-list");
+      list.innerHTML = "";
 
-      document.getElementById("product-preview").innerHTML =
-        `Saved ${product}: $${price}, Coming Soon = ${comingSoon === "yes" ? "Yes" : "No"}`;
+      products.forEach((p, i) => {
+        const div = document.createElement("div");
+        div.innerHTML = `
+          <strong>${p.name}</strong> — $${p.price}
+          ${p.soon ? "<em>(Coming Soon)</em>" : ""}
+          <button class="remove-btn" onclick="deleteProduct(${i})">Delete</button>
+          <button onclick="editProduct(${i})">Edit</button>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function deleteProduct(index) {
+      const products = getProducts();
+      products.splice(index, 1);
+      saveProducts(products);
+    }
+
+    function editProduct(index) {
+      const products = getProducts();
+      const item = products[index];
+
+      const name = prompt("New name:", item.name);
+      const price = prompt("New price:", item.price);
+      const soon = confirm("Mark as Coming Soon?");
+
+      if (name && price) {
+        products[index] = { name, price, soon };
+        saveProducts(products);
+      }
+    }
+
+    function addProduct() {
+      const name = document.getElementById("new-name").value.trim();
+      const price = document.getElementById("new-price").value.trim();
+      const soon = document.getElementById("new-soon").value === "yes";
+
+      if (!name || !price) {
+        document.getElementById("add-result").innerText = "Please enter name and price.";
+        return;
+      }
+
+      const products = getProducts();
+      products.push({ name, price, soon });
+      saveProducts(products);
+
+      document.getElementById("add-result").innerText = `Added ${name}`;
+      document.getElementById("new-name").value = "";
+      document.getElementById("new-price").value = "";
+    }
+
+    function loadUsers() {
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const container = document.getElementById("user-list");
+      container.innerHTML = "";
+
+      if (users.length === 0) {
+        container.innerText = "No users found.";
+        return;
+      }
+
+      users.forEach((u, i) => {
+        const div = document.createElement("div");
+        div.innerHTML = `${u.username}
+          <button class="remove-btn" onclick="deleteUser(${i})">Remove</button>`;
+        container.appendChild(div);
+      });
+    }
+
+    function deleteUser(index) {
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      users.splice(index, 1);
+      localStorage.setItem("users", JSON.stringify(users));
+      loadUsers();
     }
 
     function loadPayments() {
@@ -149,7 +198,7 @@
       container.innerHTML = "";
 
       if (log.length === 0) {
-        container.innerHTML = "No payments yet.";
+        container.innerHTML = "No payments found.";
         return;
       }
 
@@ -169,78 +218,10 @@
       loadPayments();
     }
 
-    function addStaff() {
-      const username = document.getElementById("new-staff-username").value.trim();
-      const password = document.getElementById("new-staff-password").value.trim();
-      const resultBox = document.getElementById("add-staff-result");
-
-      if (!username || !password) {
-        resultBox.innerHTML = "Enter both username and password.";
-        return;
-      }
-
-      let staff = JSON.parse(localStorage.getItem("staffUsers")) || {};
-      if (staff[username]) {
-        resultBox.innerHTML = "User already exists.";
-        return;
-      }
-
-      staff[username] = password;
-      localStorage.setItem("staffUsers", JSON.stringify(staff));
-      resultBox.innerHTML = `Added staff: ${username}`;
-      document.getElementById("new-staff-username").value = "";
-      document.getElementById("new-staff-password").value = "";
-      loadStaffList();
-    }
-
-    function loadStaffList() {
-      const staff = JSON.parse(localStorage.getItem("staffUsers")) || {};
-      const list = document.getElementById("staff-list");
-      list.innerHTML = "";
-
-      const keys = Object.keys(staff);
-      if (keys.length === 0) {
-        list.innerHTML = "No staff users found.";
-        return;
-      }
-
-      keys.forEach(user => {
-        const div = document.createElement("div");
-        div.innerHTML = `${user}
-          <button class="remove-btn" onclick="removeStaff('${user}')">Remove</button>`;
-        list.appendChild(div);
-      });
-    }
-
-    function removeStaff(username) {
-      let staff = JSON.parse(localStorage.getItem("staffUsers")) || {};
-      delete staff[username];
-      localStorage.setItem("staffUsers", JSON.stringify(staff));
-      loadStaffList();
-    }
-
-    function ensureDefaultStaff() {
-      let staff = JSON.parse(localStorage.getItem("staffUsers"));
-      if (!staff) {
-        staff = {
-          "SallyVanWijk": "Welcome1",
-          "WilliamVanWijk": "2035",
-          "CaroleUpton": "Welcome1"
-        };
-        localStorage.setItem("staffUsers", JSON.stringify(staff));
-      } else {
-        // Ensure Chris is NOT in staff
-        if (staff["ChrisVanWijk"]) {
-          delete staff["ChrisVanWijk"];
-          localStorage.setItem("staffUsers", JSON.stringify(staff));
-        }
-      }
-    }
-
     window.onload = function () {
-      ensureDefaultStaff();
+      loadProducts();
+      loadUsers();
       loadPayments();
-      loadStaffList();
     };
   </script>
 </body>
