@@ -82,7 +82,7 @@
     }
 
     const lines = [
-      () => `<div style="text-align:center"><strong>[time=${getTime()}] Booting up!</strong></div>`,
+      () => `[time=${getTime()}] Booting up!`,
       () => `[time=${getTime()}] 404`,
       () => `[time=${getTime()}] You have entered a wrong link.`,
       () => `[time=${getTime()}] Please go back to https://jacks-home-produce.onrender.com.`,
@@ -105,11 +105,7 @@
 
       function typeChar() {
         if (charIndex < content.length) {
-          if (i === 1) {
-            line.innerHTML += content[charIndex++]; // Booting up!
-          } else {
-            line.textContent += content[charIndex++]; // Other lines
-          }
+          line.textContent += content[charIndex++];
           setTimeout(typeChar, 25);
         } else {
           if (i === lines.length) {
