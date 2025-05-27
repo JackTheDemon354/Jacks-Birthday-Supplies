@@ -33,8 +33,16 @@
       location.reload();
     }
 
-    function pay() {
-      alert("To pay, please transfer to:\nBSB: 123-456\nAccount: 12345678\nThen email Jack.vanwijk@hotmail.com.");
+    function pay(total) {
+  alert(
+    "Please transfer $" + total.toFixed(2) +
+    " to the following account:\n" +
+    "BSB: 123-456\n" +
+    "Account Number: 12345678\n\n" +
+    "Then email your payment receipt to Jack.vanwijk@hotmail.com"
+  );
+}
+
     }
 
     window.onload = loadCart;
