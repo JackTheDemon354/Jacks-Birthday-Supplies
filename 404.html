@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>404 - Terminal Error</title>
-  <meta http-equiv="refresh" content="5;url=https://jacks-home-produce.onrender.com" />
   <style>
     body {
       background-color: black;
@@ -30,11 +29,6 @@
     @keyframes blink {
       50% { background-color: transparent; }
     }
-
-    a {
-      color: #00ff00;
-      text-decoration: underline;
-    }
   </style>
 </head>
 <body>
@@ -52,10 +46,10 @@
     }
 
     const lines = [
-      `[time=${getTime()}] 404`,
-      `[time=${getTime()}] You have entered a wrong link.`,
-      `[time=${getTime()}] Please go back to Jack's Home Produce: https://jacks-home-produce.onrender.com`,
-      `[time=${getTime()}] Auto-redirecting in 5 seconds...`
+      () => `[time=${getTime()}] 404`,
+      () => `[time=${getTime()}] You have entered a wrong link.`,
+      () => `[time=${getTime()}] Please go back to Jack's Home Produce: https://jacks-home-produce.onrender.com`,
+      () => `[time=${getTime()}] Auto-redirecting in 5 seconds...`
     ];
 
     let i = 0;
@@ -70,7 +64,7 @@
       line.textContent = "";
       terminal.insertBefore(line, cursor);
 
-      const content = lines[i++];
+      const content = lines[i++]();
       let charIndex = 0;
 
       function typeChar() {
@@ -78,6 +72,12 @@
           line.textContent += content[charIndex++];
           setTimeout(typeChar, 25);
         } else {
+          if (i === lines.length) {
+            // If it just typed the last line, start the 5-sec timer
+            setTimeout(() => {
+              window.location.href = "https://jacks-home-produce.onrender.com";
+            }, 5000);
+          }
           setTimeout(typeLine, 500);
         }
       }
