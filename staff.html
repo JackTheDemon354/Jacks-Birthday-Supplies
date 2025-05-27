@@ -1,78 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Staff Portal</title>
+  <meta charset="UTF-8" />
+  <title>Staff Portal - Jack's Home Produce</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
+      margin: 20px;
     }
+
+    h1 {
+      color: #4CAF50;
+    }
+
     .message {
       border: 1px solid #ccc;
       padding: 10px;
       margin-bottom: 10px;
-      position: relative;
+      border-radius: 5px;
     }
-    .delete-btn {
-      position: absolute;
-      right: 10px;
-      top: 10px;
-      background-color: red;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      cursor: pointer;
+
+    .message strong {
+      display: block;
+      margin-bottom: 5px;
     }
-    .signout-btn {
-      background-color: gray;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      cursor: pointer;
-      margin-bottom: 20px;
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #4CAF50;
     }
   </style>
 </head>
 <body>
   <h1>Staff Portal</h1>
-  <button class="signout-btn" onclick="signOut()">Sign Out</button>
+  <h2>Contact Messages</h2>
   <div id="messages"></div>
 
+  <a class="back-link" href="index.html">⬅ Back to Home</a>
+
   <script>
-    if (localStorage.getItem("loggedIn") !== "true") {
-      window.location.href = "login.html";
-    }
+    function loadMessages() {
+      const messages = JSON.parse(localStorage.getItem('messages')) || [];
+      const container = document.getElementById('messages');
 
-    const messages = JSON.parse(localStorage.getItem("messages") || "[]");
-    const messagesDiv = document.getElementById("messages");
+      if (messages.length === 0) {
+        container.innerHTML = "<p>No messages yet.</p>";
+        return;
+      }
 
-    function showMessages() {
-      messagesDiv.innerHTML = "";
-      messages.forEach((msg, index) => {
-        const msgDiv = document.createElement("div");
-        msgDiv.className = "message";
-        msgDiv.innerHTML = `
-          <strong>Name:</strong> ${msg.name}<br>
-          <strong>Email:</strong> ${msg.email}<br>
-          <strong>Message:</strong> ${msg.message}
-          <button class="delete-btn" onclick="deleteMessage(${index})">Delete</button>
+      container.innerHTML = '';
+      messages.forEach(msg => {
+        const div = document.createElement('div');
+        div.className = 'message';
+        div.innerHTML = `
+          <strong>${msg.name}</strong> (${msg.email})<br />
+          <em>${msg.date}</em><br />
+          <p>${msg.message}</p>
         `;
-        messagesDiv.appendChild(msgDiv);
+        container.appendChild(div);
       });
     }
 
-    function deleteMessage(index) {
-      messages.splice(index, 1);
-      localStorage.setItem("messages", JSON.stringify(messages));
-      showMessages();
-    }
-
-    function signOut() {
-      localStorage.removeItem("loggedIn");
-      window.location.href = "login.html";
-    }
-
-    showMessages();
+    window.onload = loadMessages;
   </script>
 </body>
 </html>
