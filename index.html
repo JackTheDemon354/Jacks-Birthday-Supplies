@@ -5,9 +5,7 @@
   <title>Jack's Home Produce</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       font-family: Arial, sans-serif;
@@ -143,7 +141,18 @@
 
     function sendMessage(event) {
       event.preventDefault();
-      alert('Message Sent! Thank you.');
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const message = document.getElementById('message').value;
+
+      const stored = JSON.parse(localStorage.getItem('messages')) || [];
+      stored.push({ name, email, message, date: new Date().toLocaleString() });
+      localStorage.setItem('messages', JSON.stringify(stored));
+
+      alert("Message Sent! Thank you.");
+      document.getElementById('name').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('message').value = '';
     }
   </script>
 </body>
