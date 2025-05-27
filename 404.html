@@ -51,6 +51,14 @@
       from { width: 100%; }
       to { width: 0%; }
     }
+
+    #count-text {
+      text-align: center;
+      margin-top: 10px;
+      color: #00ff00;
+      font-size: 18px;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -60,11 +68,13 @@
   <div class="countdown-bar" id="bar" style="display:none;">
     <div class="countdown-fill"></div>
   </div>
+  <div id="count-text"></div>
 
   <script>
     const terminal = document.getElementById("terminal");
     const cursor = document.querySelector(".blinking-cursor");
     const bar = document.getElementById("bar");
+    const countText = document.getElementById("count-text");
 
     function getTime() {
       const now = new Date();
@@ -72,6 +82,7 @@
     }
 
     const lines = [
+      () => `[time=${getTime()}] Booting up!`,
       () => `[time=${getTime()}] 404`,
       () => `[time=${getTime()}] You have entered a wrong link.`,
       () => `[time=${getTime()}] Please go back to Jack's Home Produce: https://jacks-home-produce.onrender.com`,
@@ -99,17 +110,30 @@
           setTimeout(typeChar, 25);
         } else {
           if (i === lines.length) {
-            // Last line typed — show bar and start redirect
             bar.style.display = 'block';
-            setTimeout(() => {
-              window.location.href = "https://jacks-home-produce.onrender.com";
-            }, 5000);
+            countText.style.display = 'block';
+            startCountdown(); // START countdown only now
           }
           setTimeout(typeLine, 500);
         }
       }
 
       typeChar();
+    }
+
+    function startCountdown() {
+      let seconds = 5;
+      countText.textContent = `Redirecting in ${seconds}...`;
+      const interval = setInterval(() => {
+        seconds--;
+        if (seconds > 0) {
+          countText.textContent = `Redirecting in ${seconds}...`;
+        } else {
+          clearInterval(interval);
+          countText.textContent = `Redirecting now!`;
+          window.location.href = "https://jacks-home-produce.onrender.com";
+        }
+      }, 1000);
     }
 
     typeLine();
