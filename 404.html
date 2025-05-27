@@ -85,7 +85,7 @@
       () => `<div style="text-align:center"><strong>[time=${getTime()}] Booting up!</strong></div>`,
       () => `[time=${getTime()}] 404`,
       () => `[time=${getTime()}] You have entered a wrong link.`,
-      () => `[time=${getTime()}] Please go back to <a href="https://jacks-home-produce.onrender.com">Jack's Home Produce</a>.`,
+      () => `[time=${getTime()}] Please go back to https://jacks-home-produce.onrender.com.`,
       () => `[time=${getTime()}] Auto-redirecting in 5 seconds...`
     ];
 
@@ -98,7 +98,6 @@
       }
 
       const line = document.createElement("div");
-      line.innerHTML = "";
       terminal.insertBefore(line, cursor);
 
       const content = lines[i++]();
@@ -106,7 +105,11 @@
 
       function typeChar() {
         if (charIndex < content.length) {
-          line.innerHTML += content[charIndex++];
+          if (i === 1) {
+            line.innerHTML += content[charIndex++]; // Booting up!
+          } else {
+            line.textContent += content[charIndex++]; // Other lines
+          }
           setTimeout(typeChar, 25);
         } else {
           if (i === lines.length) {
