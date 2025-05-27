@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 20px;
+    }
+
+    h1 {
+      color: #4CAF50;
+    }
+
+    .section {
+      margin-bottom: 30px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ccc;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    input, select {
+      padding: 8px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px;
+      background: green;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .logout-btn {
+      background: red;
+    }
+
+    .product-preview {
+      margin-top: 20px;
+    }
+
+    .payment-log {
+      background: #eee;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Admin Dashboard</h1>
+  <button class="logout-btn" onclick="logout()">🔒 Logout</button>
+
+  <div class="section">
+    <h2>Edit Products</h2>
+    <label>Product:</label>
+    <select id="product-select">
+      <option value="honey">Honey</option>
+      <option value="balloons">Helium Balloons</option>
+      <option value="lemonade">Lemonade</option>
+    </select>
+
+    <label>New Price:</label>
+    <input type="text" id="new-price" placeholder="$0.00" />
+
+    <label>Mark as Coming Soon?</label>
+    <select id="coming-soon">
+      <option value="no">No</option>
+      <option value="yes">Yes</option>
+    </select>
+
+    <button onclick="saveProduct()">Save Changes</button>
+
+    <div class="product-preview" id="product-preview"></div>
+  </div>
+
+  <div class="section">
+    <h2>Recent Payments</h2>
+    <div class="payment-log" id="payment-log">No payments yet.</div>
+  </div>
+
+  <div class="section">
+    <h2>Add New Staff User</h2>
+    <label>Username:</label>
+    <input type="text" id="new-staff-username" placeholder="Enter username" />
+
+    <label>Password:</label>
+    <input type="password" id="new-staff-password" placeholder="Enter password" />
+
+    <button onclick="addStaff()">➕ Add Staff</button>
+
+    <div id="add-staff-result" style="margin-top:10px;"></div>
+  </div>
+
+  <script>
+    function logout() {
+      alert("Logged out.");
+      window.location.href = "login.html";
+    }
+
+    function saveProduct() {
+      const product = document.getElementById("product-select").value;
+      const price = document.getElementById("new-price").value;
+      const comingSoon = document.getElementById("coming-soon").value;
+
+      const changes = {
+        price: price,
+        comingSoon: comingSoon === "yes"
+      };
+
+      const data = JSON.parse(localStorage.getItem("adminProducts")) || {};
+      data[product] = changes;
+      localStorage.setItem("adminProducts", JSON.stringify(data));
+
+      document.getElementById("product-preview").innerHTML =
+        `✅ Saved changes to <strong>${product}</strong>:<br>
+         Price = $${price}<br>
+         Coming Soon = ${comingSoon === "yes" ? "Yes" : "No"}`;
+    }
+
+    function loadPayments() {
+      const log = JSON.parse(localStorage.getItem("fakePayments")) || [];
+      const output = log.map(p => `🧾 ${p.name} paid $${p.total} for ${p.items.join(", ")}`).join("<br>");
+      document.getElementById("payment-log").innerHTML = output || "No payments yet.";
+    }
+
+    function addStaff() {
+      const username = document.getElementById("new-staff-username").value.trim();
+      const password = document.getElementById("new-staff-password").value.trim();
+      const resultBox = document.getElementById("add-staff-result");
+
+      if (!username || !password) {
+        resultBox.innerHTML = "⚠ Please enter both a username and password.";
+        return;
+      }
+
+      let staff = JSON.parse(localStorage.getItem("staffUsers")) || {};
+      if (staff[username]) {
+        resultBox.innerHTML = "❌ User already exists.";
+        return;
+      }
+
+      staff[username] = password;
+      localStorage.setItem("staffUsers", JSON.stringify(staff));
+
+      resultBox.innerHTML = `✅ Added staff: <strong>${username}</strong>`;
+      document.getElementById("new-staff-username").value = "";
+      document.getElementById("new-staff-password").value = "";
+    }
+
+    // Initialize built-in staff users if not set
+    function ensureDefaultStaff() {
+      let staff = JSON.parse(localStorage.getItem("staffUsers"));
+      if (!staff) {
+        staff = {
+          "SallyVanWijk": "Welcome1",
+          "WilliamVanWijk": "2035",
+          "ChrisVanWijk": "Welcome1",
+          "CaroleUpton": "Welcome1"
+        };
+        localStorage.setItem("staffUsers", JSON.stringify(staff));
+      }
+    }
+
+    window.onload = function() {
+      ensureDefaultStaff();
+      loadPayments();
+    };
+  </script>
+</body>
+</html>
