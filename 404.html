@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>404 - Terminal Error</title>
+  <meta http-equiv="refresh" content="5;url=https://jacks-home-produce.onrender.com" />
   <style>
     body {
       background-color: black;
@@ -51,9 +52,10 @@
     }
 
     const lines = [
-      () => `[time=${getTime()}] 404`,
-      () => `[time=${getTime()}] You have entered a wrong link.`,
-      () => `[time=${getTime()}] Please go back to <a href="https://jacks-home-produce.onrender.com">Jack's Home Produce</a>.`
+      `[time=${getTime()}] 404`,
+      `[time=${getTime()}] You have entered a wrong link.`,
+      `[time=${getTime()}] Please go back to Jack's Home Produce: https://jacks-home-produce.onrender.com`,
+      `[time=${getTime()}] Auto-redirecting in 5 seconds...`
     ];
 
     let i = 0;
@@ -65,15 +67,15 @@
       }
 
       const line = document.createElement("div");
-      line.innerHTML = "";
+      line.textContent = "";
       terminal.insertBefore(line, cursor);
 
-      const content = lines[i++]();
+      const content = lines[i++];
       let charIndex = 0;
 
       function typeChar() {
         if (charIndex < content.length) {
-          line.innerHTML += content[charIndex++];
+          line.textContent += content[charIndex++];
           setTimeout(typeChar, 25);
         } else {
           setTimeout(typeLine, 500);
