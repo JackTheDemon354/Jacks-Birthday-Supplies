@@ -160,7 +160,7 @@
 
       const products = getProducts();
       products.push({ name, price, soon });
-      saveProducts(products);
+      saveProducts(products); // This will auto reload
 
       document.getElementById("add-result").innerText = `Added ${name}`;
       document.getElementById("new-name").value = "";
