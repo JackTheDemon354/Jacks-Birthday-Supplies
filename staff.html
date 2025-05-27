@@ -18,11 +18,24 @@
       padding: 10px;
       margin-bottom: 10px;
       border-radius: 5px;
+      position: relative;
     }
 
     .message strong {
       display: block;
       margin-bottom: 5px;
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 3px;
     }
 
     .back-link {
@@ -51,16 +64,24 @@
       }
 
       container.innerHTML = '';
-      messages.forEach(msg => {
+      messages.forEach((msg, index) => {
         const div = document.createElement('div');
         div.className = 'message';
         div.innerHTML = `
           <strong>${msg.name}</strong> (${msg.email})<br />
           <em>${msg.date}</em><br />
           <p>${msg.message}</p>
+          <button class="delete-btn" onclick="deleteMessage(${index})">Delete</button>
         `;
         container.appendChild(div);
       });
+    }
+
+    function deleteMessage(index) {
+      let messages = JSON.parse(localStorage.getItem('messages')) || [];
+      messages.splice(index, 1);
+      localStorage.setItem('messages', JSON.stringify(messages));
+      loadMessages(); // reload the list
     }
 
     window.onload = loadMessages;
