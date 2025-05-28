@@ -9,11 +9,7 @@
       background: #f9f9f9;
       margin: 20px;
     }
-
-    h1 {
-      color: #4CAF50;
-    }
-
+    h1 { color: #4CAF50; }
     .section {
       margin-bottom: 30px;
       background: #fff;
@@ -21,18 +17,12 @@
       border-radius: 8px;
       box-shadow: 0 0 10px #ccc;
     }
-
-    label {
-      display: block;
-      margin: 10px 0 5px;
-    }
-
+    label { display: block; margin: 10px 0 5px; }
     input, select {
       padding: 8px;
       width: 100%;
       margin-bottom: 10px;
     }
-
     button {
       padding: 10px;
       background: green;
@@ -41,18 +31,13 @@
       cursor: pointer;
       margin-top: 10px;
     }
-
-    .logout-btn {
-      background: red;
-    }
-
+    .logout-btn { background: red; }
     .remove-btn {
       background: darkred;
       color: white;
       margin-left: 10px;
       padding: 5px 10px;
     }
-
     .log-entry {
       background: #eee;
       padding: 10px;
@@ -83,8 +68,12 @@
   </div>
 
   <div class="section">
-    <h2>Delete User Accounts</h2>
-    <div id="user-list">Loading users...</div>
+    <h2>Manage Staff Accounts</h2>
+    <div id="staff-list">Loading staff...</div>
+    <h3>Add New Staff</h3>
+    <input type="text" id="staff-username" placeholder="Username">
+    <input type="password" id="staff-password" placeholder="Password">
+    <button onclick="addStaff()">Add Staff</button>
   </div>
 
   <div class="section">
@@ -93,17 +82,18 @@
   </div>
 
   <script>
+    // Redirect if not logged in as admin1
+    const mods = JSON.parse(localStorage.getItem("moderators"));
+    const loggedIn = Object.keys(mods || {}).includes("admin1");
+    if (!loggedIn) window.location.href = "moderator-login.html";
+
     function logout() {
       alert("Logged out.");
-      window.location.href = "login.html";
+      window.location.href = "moderator-login.html";
     }
 
     function getProducts() {
-      return JSON.parse(localStorage.getItem("siteProducts")) || [
-        { name: "Honey", price: "8.50", soon: false },
-        { name: "Helium Balloons", price: "3.00", soon: false },
-        { name: "Lemonade", price: "3.50", soon: true }
-      ];
+      return JSON.parse(localStorage.getItem("siteProducts")) || [];
     }
 
     function saveProducts(products) {
@@ -115,7 +105,6 @@
       const products = getProducts();
       const list = document.getElementById("product-list");
       list.innerHTML = "";
-
       products.forEach((p, i) => {
         const div = document.createElement("div");
         div.innerHTML = `
@@ -137,11 +126,9 @@
     function editProduct(index) {
       const products = getProducts();
       const item = products[index];
-
       const name = prompt("New name:", item.name);
       const price = prompt("New price:", item.price);
       const soon = confirm("Mark as Coming Soon?");
-
       if (name && price) {
         products[index] = { name, price, soon };
         saveProducts(products);
@@ -152,61 +139,69 @@
       const name = document.getElementById("new-name").value.trim();
       const price = document.getElementById("new-price").value.trim();
       const soon = document.getElementById("new-soon").value === "yes";
-
-      if (!name || !price) {
-        document.getElementById("add-result").innerText = "Please enter name and price.";
-        return;
-      }
-
+      if (!name || !price) return alert("Enter name and price.");
       const products = getProducts();
       products.push({ name, price, soon });
-      saveProducts(products); // This will auto reload
-
-      document.getElementById("add-result").innerText = `Added ${name}`;
+      saveProducts(products);
       document.getElementById("new-name").value = "";
       document.getElementById("new-price").value = "";
+      document.getElementById("add-result").textContent = `${name} added.`;
     }
 
-    function loadUsers() {
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-      const container = document.getElementById("user-list");
-      container.innerHTML = "";
-
-      if (users.length === 0) {
-        container.innerText = "No users found.";
-        return;
-      }
-
-      users.forEach((u, i) => {
+    function loadStaffList() {
+      const staff = JSON.parse(localStorage.getItem("staffUsers")) || {};
+      const list = document.getElementById("staff-list");
+      list.innerHTML = "";
+      for (const username in staff) {
         const div = document.createElement("div");
-        div.innerHTML = `${u.username}
-          <button class="remove-btn" onclick="deleteUser(${i})">Remove</button>`;
-        container.appendChild(div);
-      });
+        div.innerHTML = `${username}
+          <button class="remove-btn" onclick="removeStaff('${username}')">Delete</button>
+          <button onclick="changeStaffPassword('${username}')">Change Password</button>`;
+        list.appendChild(div);
+      }
     }
 
-    function deleteUser(index) {
-      let users = JSON.parse(localStorage.getItem("users")) || [];
-      users.splice(index, 1);
-      localStorage.setItem("users", JSON.stringify(users));
-      loadUsers();
+    function removeStaff(username) {
+      const staff = JSON.parse(localStorage.getItem("staffUsers")) || {};
+      delete staff[username];
+      localStorage.setItem("staffUsers", JSON.stringify(staff));
+      loadStaffList();
+    }
+
+    function changeStaffPassword(username) {
+      const newPass = prompt("Enter new password for " + username);
+      if (newPass) {
+        const staff = JSON.parse(localStorage.getItem("staffUsers")) || {};
+        staff[username] = newPass;
+        localStorage.setItem("staffUsers", JSON.stringify(staff));
+        alert("Password changed.");
+      }
+    }
+
+    function addStaff() {
+      const username = document.getElementById("staff-username").value;
+      const password = document.getElementById("staff-password").value;
+      if (!username || !password) return alert("Enter both username and password.");
+      const staff = JSON.parse(localStorage.getItem("staffUsers")) || {};
+      if (staff[username]) return alert("Staff already exists.");
+      staff[username] = password;
+      localStorage.setItem("staffUsers", JSON.stringify(staff));
+      loadStaffList();
+      alert("Staff added!");
+      document.getElementById("staff-username").value = "";
+      document.getElementById("staff-password").value = "";
     }
 
     function loadPayments() {
       const log = JSON.parse(localStorage.getItem("fakePayments")) || [];
       const container = document.getElementById("payment-log");
       container.innerHTML = "";
-
-      if (log.length === 0) {
-        container.innerHTML = "No payments found.";
-        return;
-      }
-
+      if (log.length === 0) return container.innerHTML = "No payments found.";
       log.forEach((p, index) => {
         const div = document.createElement("div");
         div.className = "log-entry";
         div.innerHTML = `🧾 ${p.name} paid $${p.total} for ${p.items.join(", ")}
-        <button class="remove-btn" onclick="deletePayment(${index})">Delete</button>`;
+          <button class="remove-btn" onclick="deletePayment(${index})">Delete</button>`;
         container.appendChild(div);
       });
     }
@@ -220,7 +215,7 @@
 
     window.onload = function () {
       loadProducts();
-      loadUsers();
+      loadStaffList();
       loadPayments();
     };
   </script>
