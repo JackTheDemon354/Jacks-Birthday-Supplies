@@ -1,3 +1,4 @@
+<!-- moderator-login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,6 +34,14 @@
   </div>
 
   <script>
+    // Default moderator setup
+    if (!localStorage.getItem("moderators")) {
+      const moderators = {
+        "ModJack": "mod123"
+      };
+      localStorage.setItem("moderators", JSON.stringify(moderators));
+    }
+
     function login() {
       const username = document.getElementById("mod-username").value;
       const password = document.getElementById("mod-password").value;
