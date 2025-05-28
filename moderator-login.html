@@ -37,7 +37,7 @@
     // Default moderator setup
     if (!localStorage.getItem("moderators")) {
       const moderators = {
-        "ModJack": "mod123"
+        "admin1": "JacksHomeProduce"
       };
       localStorage.setItem("moderators", JSON.stringify(moderators));
     }
@@ -49,7 +49,7 @@
       const mods = JSON.parse(localStorage.getItem("moderators")) || {};
       if (mods[username] && mods[username] === password) {
         alert("Moderator login successful!");
-        window.location.href = "moderator.html";
+        window.location.href = "admin.html";
       } else {
         alert("Incorrect moderator credentials.");
       }
