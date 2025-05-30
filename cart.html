@@ -9,10 +9,13 @@
     button { background: red; color: white; padding: 10px; border: none; cursor: pointer; }
   </style>
   <script>
-    function loadCart() {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let cart = [];
+
+    function renderCart() {
       const table = document.getElementById('cartTable');
+      table.innerHTML = '<tr><th>Item</th><th>Price</th><th>Remove</th></tr>'; // Clear table
       let total = 0;
+
       cart.forEach((item, index) => {
         const row = table.insertRow();
         row.insertCell(0).textContent = item.item;
@@ -23,26 +26,30 @@
         row.insertCell(2).appendChild(delBtn);
         total += item.price;
       });
+
       document.getElementById('total').textContent = "Total: $" + total.toFixed(2);
     }
 
-    function deleteItem(index) {
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      location.reload();
+    function loadCart() {
+      cart = JSON.parse(localStorage.getItem('cart')) || [];
+      renderCart();
     }
 
-    function pay(total) {
-  alert(
-    "Please transfer $" + total.toFixed(2) +
-    " to the following account:\n" +
-    "BSB: 123-456\n" +
-    "Account Number: 12345678\n\n" +
-    "Then email your payment receipt to Jack.vanwijk@hotmail.com"
-  );
-}
+    function deleteItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart(); // No reload
+    }
 
+    function pay() {
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      alert(
+        "Please transfer $" + total.toFixed(2) +
+        " to the following account:\n" +
+        "BSB: 123-456\n" +
+        "Account Number: 12345678\n\n" +
+        "Then email your payment receipt to Jack.vanwijk@hotmail.com"
+      );
     }
 
     window.onload = loadCart;
