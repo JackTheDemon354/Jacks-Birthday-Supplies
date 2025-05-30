@@ -82,57 +82,48 @@
   </div>
 
   <script>
-    // Redirect if not logged in as admin1
-    const mods = JSON.parse(localStorage.getItem("moderators"));
-    const loggedIn = Object.keys(mods || {}).includes("admin1");
-    if (!loggedIn) window.location.href = "moderator-login.html";
+    const API_KEY = "$2a$10$CuME3phmsUJdOc4wyXYkgOLbkp./fHAvuf8RxPsBWArmryMT48zYK";
+    const BIN_ID = "6838fd6d8561e97a501d4e06";
+
+    const headers = {
+      "X-Master-Key": API_KEY,
+      "Content-Type": "application/json"
+    };
+
+    let products = [];
 
     function logout() {
       alert("Logged out.");
       window.location.href = "moderator-login.html";
     }
 
-    function getProducts() {
-      return JSON.parse(localStorage.getItem("siteProducts")) || [];
-    }
-
-    function saveProducts(products) {
-      localStorage.setItem("siteProducts", JSON.stringify(products));
-      loadProducts();
-    }
-
     function loadProducts() {
-      const products = getProducts();
-      const list = document.getElementById("product-list");
-      list.innerHTML = "";
-      products.forEach((p, i) => {
-        const div = document.createElement("div");
-        div.innerHTML = `
-          <strong>${p.name}</strong> — $${p.price}
-          ${p.soon ? "<em>(Coming Soon)</em>" : ""}
-          <button class="remove-btn" onclick="deleteProduct(${i})">Delete</button>
-          <button onclick="editProduct(${i})">Edit</button>
-        `;
-        list.appendChild(div);
-      });
+      fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers })
+        .then(res => res.json())
+        .then(data => {
+          products = data.record || [];
+          const list = document.getElementById("product-list");
+          list.innerHTML = "";
+          products.forEach((p, i) => {
+            const div = document.createElement("div");
+            div.innerHTML = `
+              <strong>${p.name}</strong> — $${p.price}
+              ${p.soon ? "<em>(Coming Soon)</em>" : ""}
+              <button class="remove-btn" onclick="deleteProduct(${i})">Delete</button>
+              <button onclick="editProduct(${i})">Edit</button>
+            `;
+            list.appendChild(div);
+          });
+        });
     }
 
-    function deleteProduct(index) {
-      const products = getProducts();
-      products.splice(index, 1);
-      saveProducts(products);
-    }
-
-    function editProduct(index) {
-      const products = getProducts();
-      const item = products[index];
-      const name = prompt("New name:", item.name);
-      const price = prompt("New price:", item.price);
-      const soon = confirm("Mark as Coming Soon?");
-      if (name && price) {
-        products[index] = { name, price, soon };
-        saveProducts(products);
-      }
+    function saveProducts() {
+      fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify(products)
+      })
+      .then(() => loadProducts());
     }
 
     function addProduct() {
@@ -140,12 +131,27 @@
       const price = document.getElementById("new-price").value.trim();
       const soon = document.getElementById("new-soon").value === "yes";
       if (!name || !price) return alert("Enter name and price.");
-      const products = getProducts();
       products.push({ name, price, soon });
-      saveProducts(products);
+      saveProducts();
       document.getElementById("new-name").value = "";
       document.getElementById("new-price").value = "";
       document.getElementById("add-result").textContent = `${name} added.`;
+    }
+
+    function deleteProduct(index) {
+      products.splice(index, 1);
+      saveProducts();
+    }
+
+    function editProduct(index) {
+      const item = products[index];
+      const name = prompt("New name:", item.name);
+      const price = prompt("New price:", item.price);
+      const soon = confirm("Mark as Coming Soon?");
+      if (name && price) {
+        products[index] = { name, price, soon };
+        saveProducts();
+      }
     }
 
     function loadStaffList() {
@@ -212,6 +218,10 @@
       localStorage.setItem("fakePayments", JSON.stringify(log));
       loadPayments();
     }
+
+    const mods = JSON.parse(localStorage.getItem("moderators"));
+    const loggedIn = Object.keys(mods || {}).includes("admin1");
+    if (!loggedIn) window.location.href = "moderator-login.html";
 
     window.onload = function () {
       loadProducts();
