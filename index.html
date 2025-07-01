@@ -4,11 +4,14 @@
   <meta charset="UTF-8" />
   <title>Jack's Home Produce</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ✅ Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
     * { box-sizing: border-box; }
 
     body {
-      font-family: Comic Sans MS, Calibri;
+      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
       background-color: #ffffff;
@@ -35,6 +38,24 @@
       padding: 10px 20px;
       border-radius: 5px;
       display: inline-block;
+    }
+
+    /* ✅ Icon Bar Styling */
+    .icon-bar {
+      text-align: center;
+      margin: 10px 0 20px;
+      font-size: 24px;
+    }
+
+    .icon-bar a {
+      margin: 0 15px;
+      color: #4CAF50;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .icon-bar a:hover {
+      color: #2e7d32;
     }
 
     .container {
@@ -94,6 +115,27 @@
     <a href="user-login.html">Sign In</a>
   </nav>
 
+  <!-- ✅ ICON BAR -->
+  <div class="icon-bar">
+    <a href="https://discord.gg/2mma7eXnxG" target="_blank" title="Jack's Discord Server">
+      <i class="fab fa-discord"></i>
+    </a>
+    <a href="https://www.xbox.com/en-au/play/user/JackTheDemon354?xr=shellnav" target="_blank" title="JackTheDemon354's Xbox">
+      <i class="fab fa-xbox"></i>
+    </a>
+    <a href="mailto:Jack.vanwijk@hotmail.com" title="Jack's Hotmail">
+      <i class="fas fa-envelope"></i>
+    </a>
+     <a href="mailto:Jackdavidvanwijk@gmail.com" title="Jack's Gmail">
+      <i class="fas fa-envelope"></i>
+    </a>
+     <a href="mailto:Jackdavidvanwijk@gmail.com" title="Jack's Gmail">
+      <i class="fas fa-envelope"></i>
+       </a>
+     <a href="mailto:Jack.VanWijk@student.ggs.wa.edu.au" title="Jack's School Email">
+      <i class="fas fa-envelope"></i>
+  </div>
+
   <div class="container">
     <div class="product">
       <h2>Honey</h2>
@@ -134,7 +176,7 @@
   <script>
     function addToCart(item, price) {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.push({ item, price }); // 👈 using 'item' key instead of 'product'
+      cart.push({ item, price });
       localStorage.setItem('cart', JSON.stringify(cart));
       alert(item + ' added to cart!');
     }
